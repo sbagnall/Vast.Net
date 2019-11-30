@@ -15,9 +15,7 @@ namespace ImdCloud.Test
         [Test]
         public void When_the_command_succeeds()
         {
-            var mediaInfo = new MediaInfo(testFile);
-            
-            var actual = mediaInfo.GetMediaInfo();
+            var actual = MediaInfo.GetMediaInfo(testFile);
 
             Assert.AreEqual(22.805f, actual.DurationSeconds);
             Assert.AreEqual(23.976f, actual.FrameRate);
@@ -25,11 +23,20 @@ namespace ImdCloud.Test
         }
 
         [Test]
-        public void When_the_command_errors()
+        public void When_the_command_errors_it_throws_an_exception()
         {
-            var mediaInfo = new MediaInfo("not valid");
+            Assert.Catch<Exception>(() => MediaInfo.GetMediaInfo("not valid"));
+        }
 
-            Assert.Catch<Exception>(() => mediaInfo.GetMediaInfo());
+        [Test]
+        public void It_runs_the_command_once_and_caches_the_result()
+        {
+            MediaInfo.GetMediaInfo(testFile);
+
+            Assert.IsTrue(MediaInfo.CachedResults.ContainsKey(testFile));
+            Assert.AreEqual(22.805f, MediaInfo.CachedResults[testFile].DurationSeconds);
+            Assert.AreEqual(23.976f, MediaInfo.CachedResults[testFile].FrameRate);
+            Assert.AreEqual(546, MediaInfo.CachedResults[testFile].FrameCount);
         }
     }
 }

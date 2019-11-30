@@ -1,25 +1,19 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ImdCloud
 {
-    public class MediaInfo
+    public static class MediaInfo
     {
         private const string INFORM_PARAMS = "General;%FrameCount%,%FrameRate%,%Duration%";
 
-        private static MediaInfoResult cachedResult = null;
+        public static Dictionary<string, MediaInfoResult> CachedResults = new Dictionary<string, MediaInfoResult>();
 
-        private string sourceUri;
-
-        public MediaInfo(string sourceUri)
+        public static MediaInfoResult GetMediaInfo(string sourceUri)
         {
-            this.sourceUri = sourceUri;
-        }
-
-        public MediaInfoResult GetMediaInfo()
-        {
-            if (cachedResult != null)
+            if (CachedResults.ContainsKey(sourceUri))
             {
-                return cachedResult;
+                return CachedResults[sourceUri];
             }
 
             var process = new Process()
@@ -42,14 +36,14 @@ namespace ImdCloud
 
             var mediaInfo = result.Trim().Split(',');
 
-            cachedResult = new MediaInfoResult()
+            CachedResults.Add(sourceUri, new MediaInfoResult()
             {
                 FrameCount = int.Parse(mediaInfo[0]),
                 FrameRate = float.Parse(mediaInfo[1]),
                 DurationSeconds = float.Parse(mediaInfo[2]) / 1000.0f,
-            };
+            });
 
-            return cachedResult;
+            return CachedResults[sourceUri];
         }
             
         public class MediaInfoResult

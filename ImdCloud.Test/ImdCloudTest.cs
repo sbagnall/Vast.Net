@@ -7,7 +7,7 @@ namespace ImdCloud.Test
     [TestFixture]
     public class ImdCloudTest
     {
-        private AuthenticationHelpers authenticationHelpers;
+        private TestHelpers testHelpers;
         private ApiCredentials apiCredentials;
 
         [SetUp]
@@ -20,13 +20,13 @@ namespace ImdCloud.Test
                 Secret = "secret"
             };
 
-            authenticationHelpers = new AuthenticationHelpers(apiCredentials);
+            testHelpers = new TestHelpers(apiCredentials);
         }
 
         [Test]
         public async ValueTask It_returns_a_response_when_succesful()
         {
-            var httpMessageHandler = authenticationHelpers.StubAuthentication(true, "a@b.c", "secret");
+            var httpMessageHandler = testHelpers.StubAuthentication(true, "a@b.c", "secret");
 
             var client = new Client(httpMessageHandler.Object, apiCredentials);
 
@@ -44,7 +44,7 @@ namespace ImdCloud.Test
         [Test]
         public void It_raises_an_error_when_unsuccesful()
         {
-            var httpMessageHandler = authenticationHelpers.StubAuthentication(false, "a@b.c", "secret");
+            var httpMessageHandler = testHelpers.StubAuthentication(false, "a@b.c", "secret");
 
             var client = new Client(httpMessageHandler.Object, apiCredentials);
 

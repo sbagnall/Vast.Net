@@ -22,23 +22,9 @@ namespace ImdCloud
             this.apiCredentials = apiCredentials;
         }
 
-        // this creates circular reference - pass token in s optional parameter instead
-        //
-        // We do not want users to see VAST demo orders on their accounts
-        // so we use a specific user set up for a VAST Demo account on IMD Cloud
-        //public void AsBackgroundUser()
-        //{
-            //background_account_token = ImdCloud.login!(
-            //    username: ENV.fetch('IMD_USER'),
-            //    password: ENV.fetch('IMD_USER_PASSWORD'),
-            //    account_id: ENV.fetch('IMD_USERS_ACCOUNT_ID')
-            //).fetch('token')
-        //    
-        //}
-
         public async ValueTask<IDictionary<string, string>> Get(
             string path, 
-            IDictionary<string, string> @params, 
+            IDictionary<string, string> @params = default, 
             string backgroundUserToken = default, 
             CancellationToken token = default)
         {
@@ -50,7 +36,10 @@ namespace ImdCloud
                 {
                     var request = Connection(HttpMethod.Get, path, backgroundUserToken);
 
-                    request.RequestUri = new Uri(QueryHelpers.AddQueryString(request.RequestUri.ToString(), @params));
+                    if (@params != default)
+                    {
+                        request.RequestUri = new Uri(QueryHelpers.AddQueryString(request.RequestUri.ToString(), @params));
+                    }
 
                     return request;
                 }, token);
