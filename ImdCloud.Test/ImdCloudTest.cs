@@ -2,7 +2,7 @@ using ImdCloud;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
-namespace NUnitTestProject1
+namespace ImdCloud.Test
 {
     [TestFixture]
     public class ImdCloudTest
@@ -30,7 +30,7 @@ namespace NUnitTestProject1
 
             var client = new Client(httpMessageHandler.Object, apiCredentials);
 
-            var imdCloud = new ImdCloud.ImdCloud(client);
+            var imdCloud = new ImdCloud(client);
 
             var actual = await imdCloud.Login(new UserCredentials()
             {
@@ -48,7 +48,7 @@ namespace NUnitTestProject1
 
             var client = new Client(httpMessageHandler.Object, apiCredentials);
 
-            var imdCloud = new ImdCloud.ImdCloud(client);
+            var imdCloud = new ImdCloud(client);
 
             Assert.ThrowsAsync<Error>(async () => await imdCloud.Login(new UserCredentials()
             {

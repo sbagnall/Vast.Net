@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImdCloud", "ImdCloud\ImdCloud.csproj", "{2184BE47-AE27-4E2D-B522-44FE653FC2F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImdCloud.Test", "ImdCloud.Test\ImdCloud.Test.csproj", "{782156EA-96F1-4D5A-9702-CDD730F20D35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImdCloud.Test", "ImdCloud.Test\ImdCloud.Test.csproj", "{782156EA-96F1-4D5A-9702-CDD730F20D35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
