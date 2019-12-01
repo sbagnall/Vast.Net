@@ -13,12 +13,12 @@ namespace ImdCloud
 {
     public class Client : IClient
     {
-        private readonly HttpMessageHandler messageHandler;
+        private readonly IHttpClientFactory httpClientFactory;
         private readonly ApiCredentials apiCredentials;
 
-        public Client(HttpMessageHandler messageHandler, ApiCredentials apiCredentials)
+        public Client(IHttpClientFactory httpClientFactory, ApiCredentials apiCredentials)
         {
-            this.messageHandler = messageHandler;
+            this.httpClientFactory = httpClientFactory;
             this.apiCredentials = apiCredentials;
         }
 
@@ -89,7 +89,7 @@ namespace ImdCloud
         {
             token.ThrowIfCancellationRequested();
 
-            using (var client = new HttpClient(messageHandler))
+            using (var client = httpClientFactory.CreateClient())
             using (var request = requestFactory())
             {
                 using (var response = await client

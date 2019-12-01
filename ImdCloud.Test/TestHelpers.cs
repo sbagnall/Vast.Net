@@ -20,7 +20,7 @@ namespace ImdCloud.Test
             this.apiCredentials = apiCredentials;
         }
 
-        public Mock<HttpMessageHandler> StubAuthentication(bool success = true, string username = "test@account.com", string password = "Password")
+        public Mock<IHttpClientFactory> StubAuthentication(bool success = true, string username = "test@account.com", string password = "Password")
         {
             const string SUCCESS_RESPONSE = @"{
     ""token"": ""sampletoken"",
@@ -35,7 +35,10 @@ namespace ImdCloud.Test
 
             var response = success ? SUCCESS_RESPONSE : FAILURE_RESPONSE;
 
+            var clientFactory = new Mock<IHttpClientFactory>();
             var messageHandler = new Mock<HttpMessageHandler>();
+
+            clientFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(new HttpClient(messageHandler.Object));
 
             messageHandler.Protected().Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
@@ -52,7 +55,7 @@ namespace ImdCloud.Test
                     Content = new StringContent(response)
                 });
 
-            return messageHandler;
+            return clientFactory;
         }
 
         public void StubOrderCreation(int orderId, string token)
