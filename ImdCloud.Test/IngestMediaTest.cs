@@ -33,6 +33,10 @@ namespace ImdCloud.Test
             testHelpers.StubVersionFileCreation(versionId, fileId, token);
             testHelpers.StubGetUploadCredentials(versionId, fileId, token);
 
+
+
+            //target = new IngestMedia(client, fileSize, fileName);
+
         }
 
         [Test]

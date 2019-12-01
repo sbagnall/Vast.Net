@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "App": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "VAST_Secret": "secret",
+        "VAST_Key": "Key",
+        "VAST_BaseUrl": "http://test.com"
+      }
+    }
+  }
+}

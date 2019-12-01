@@ -7,17 +7,13 @@ namespace ImdCloud
     public class S3Credentials : IS3Credentials
     {
         private IClient client;
-        private int versionId;
-        private int fileId;
-
-        public S3Credentials(IClient client, int versionId, int fileId)
+        
+        public S3Credentials(IClient client)
         {
             this.client = client;
-            this.versionId = versionId;
-            this.fileId = fileId;
         }
 
-        public async ValueTask<S3CredentialsResult> Execute(CancellationToken token)
+        public async ValueTask<S3CredentialsResult> Execute(int versionId, int fileId, CancellationToken token)
         {
             var result = await client.Get($"versions/{versionId}/files/{fileId}/uploadcredentials", token: token);
 
