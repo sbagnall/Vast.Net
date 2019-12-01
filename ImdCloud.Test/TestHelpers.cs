@@ -42,7 +42,7 @@ namespace ImdCloud.Test
 
             messageHandler.Protected().Setup<Task<HttpResponseMessage>>(
                 "SendAsync",
-                ItExpr.Is<HttpRequestMessage>(r => CheckRequest(
+                ItExpr.Is<HttpRequestMessage>(r => CheckRequest<Dictionary<string, string>>(
                     r, 
                     HttpMethod.Post, 
                     $"{apiCredentials.BaseUrl}/login",
@@ -58,16 +58,19 @@ namespace ImdCloud.Test
             return clientFactory;
         }
 
-        public void StubOrderCreation(int orderId, string token)
+        public Mock<IHttpClientFactory> StubOrderCreation(int orderId, string token)
         {
             var response = $@"{{
     ""orderId"": { orderId }
 }}";
+            var clientFactory = new Mock<IHttpClientFactory>();
             var messageHandler = new Mock<HttpMessageHandler>();
+
+            clientFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(new HttpClient(messageHandler.Object));
 
             messageHandler.Protected().Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
-                    ItExpr.Is<HttpRequestMessage>(r => CheckRequest(
+                    ItExpr.Is<HttpRequestMessage>(r => CheckRequest<object>(
                         r,
                         HttpMethod.Post,
                         $"{apiCredentials.BaseUrl}/orders",
@@ -79,9 +82,11 @@ namespace ImdCloud.Test
                         StatusCode = System.Net.HttpStatusCode.OK,
                         Content = new StringContent(response),
                     });
+
+            return clientFactory;
         }
 
-        public void StubVersionCreation(int orderId, int versionId, string token)
+        public Mock<IHttpClientFactory> StubVersionCreation(int orderId, int versionId, string token)
         {
             var response = $@"{{
     ""versions"": [
@@ -91,15 +96,18 @@ namespace ImdCloud.Test
         }}
     ]
 }}";
+            var clientFactory = new Mock<IHttpClientFactory>();
             var messageHandler = new Mock<HttpMessageHandler>();
+
+            clientFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(new HttpClient(messageHandler.Object));
 
             messageHandler.Protected().Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
-                    ItExpr.Is<HttpRequestMessage>(r => CheckRequest(
+                    ItExpr.Is<HttpRequestMessage>(r => CheckRequest<VersionRequest>(
                         r,
                         HttpMethod.Post,
                         $"{apiCredentials.BaseUrl}/versions",
-                        (content) => content["orderId"] == orderId.ToString(),
+                        (content) => content.OrderId == orderId,
                         token).GetAwaiter().GetResult()),
                     ItExpr.IsAny<CancellationToken>())
                     .ReturnsAsync(new HttpResponseMessage()
@@ -107,6 +115,8 @@ namespace ImdCloud.Test
                         StatusCode = System.Net.HttpStatusCode.OK,
                         Content = new StringContent(response),
                     });
+
+            return clientFactory;
         }
 
         public void StubVersionFileCreation(int versionId, int fileId, string token)
@@ -119,7 +129,7 @@ namespace ImdCloud.Test
 
             messageHandler.Protected().Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
-                    ItExpr.Is<HttpRequestMessage>(r => CheckRequest(
+                    ItExpr.Is<HttpRequestMessage>(r => CheckRequest<object>(
                         r,
                         HttpMethod.Post,
                         $"{apiCredentials.BaseUrl}/versions/#{versionId}/files",
@@ -149,7 +159,7 @@ namespace ImdCloud.Test
 
             messageHandler.Protected().Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
-                    ItExpr.Is<HttpRequestMessage>(r => CheckRequest(
+                    ItExpr.Is<HttpRequestMessage>(r => CheckRequest<object>(
                         r,
                         HttpMethod.Get,
                         $"{apiCredentials.BaseUrl}/versions/{versionId}/files/{fileId}/uploadcredentialslogin",
@@ -164,11 +174,11 @@ namespace ImdCloud.Test
         }
 
        
-        private async ValueTask<bool> CheckRequest(
+        private async ValueTask<bool> CheckRequest<T>(
           HttpRequestMessage message,
           HttpMethod method,
           string requestUrl,
-          Func<IDictionary<string, string>, bool> checkBody,
+          Func<T, bool> checkBody,
           string token = null)
         {
             if (!(message.Content is StringContent))
@@ -176,7 +186,7 @@ namespace ImdCloud.Test
                 return false;
             }
 
-            var content = JsonConvert.DeserializeObject<IDictionary<string, string>>(
+            var content = JsonConvert.DeserializeObject<T>(
                 await (message.Content as StringContent).ReadAsStringAsync());
 
             return message.Method == method
@@ -188,5 +198,10 @@ namespace ImdCloud.Test
                 && message.Headers.TryGetValues("X-Api-Secret", out IEnumerable<string> secrets) && secrets.Contains(apiCredentials.Secret)
                 && (token == null || message.Headers.TryGetValues("X-Api-Token", out IEnumerable<string> tokens) && tokens.Contains(token));
         }
+    }
+
+    internal class VersionRequest
+    {
+        public int OrderId { get; set; }
     }
 }

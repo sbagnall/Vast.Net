@@ -7,4 +7,11 @@ namespace ImdCloud
     {
         ValueTask<VersionCreationResult> Execute(int orderId, CancellationToken token);
     }
+
+    public class VersionCreationResult
+    {
+        public int Id { get; set; }
+
+        public string VersionId { get; set; }
+    }
 }

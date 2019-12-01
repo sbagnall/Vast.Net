@@ -15,7 +15,7 @@ namespace ImdCloud
 
         public async ValueTask<S3CredentialsResult> Execute(int versionId, int fileId, CancellationToken token)
         {
-            var result = await client.Get($"versions/{versionId}/files/{fileId}/uploadcredentials", token: token);
+            var result = await client.Get<Dictionary<string, string>>($"versions/{versionId}/files/{fileId}/uploadcredentials", token: token);
 
             return Map(result);
         }

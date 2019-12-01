@@ -7,4 +7,9 @@ namespace ImdCloud
     {
         ValueTask<OrderCreationResult> Execute(CancellationToken token);
     }
+
+    public class OrderCreationResult
+    {
+        public int OrderId { get; set; }
+    }
 }

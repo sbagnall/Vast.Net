@@ -28,8 +28,8 @@ namespace ImdCloud.Test
 
             testHelpers = new TestHelpers(apiCredentials);
 
-            testHelpers.StubOrderCreation(orderId, token);
-            testHelpers.StubVersionCreation(orderId, versionId, token);
+            //testHelpers.StubOrderCreation(orderId, token);
+            //testHelpers.StubVersionCreation(orderId, versionId, token);
             testHelpers.StubVersionFileCreation(versionId, fileId, token);
             testHelpers.StubGetUploadCredentials(versionId, fileId, token);
 

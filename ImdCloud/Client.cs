@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
@@ -21,17 +22,17 @@ namespace ImdCloud
             this.apiCredentials = apiCredentials;
         }
 
-        public async ValueTask<IDictionary<string, string>> Get(
+        public async ValueTask<T> Get<T>(
             string path, 
             IDictionary<string, string> @params = default, 
             string backgroundUserToken = default, 
-            CancellationToken token = default)
+            CancellationToken token = default) where T: new()
         {
             token.ThrowIfCancellationRequested();
 
             try
             {
-                return await Query(() =>
+                return await Query<T>(() =>
                 {
                     var request = Connection(HttpMethod.Get, path, backgroundUserToken);
 
@@ -49,17 +50,17 @@ namespace ImdCloud
             }
         }
 
-        public async ValueTask<IDictionary<string, string>> Post(
+        public async ValueTask<T> Post<T>(
             string path, 
-            IDictionary<string, string> payload, 
+            JObject payload, 
             string backgroundUserToken = default, 
-            CancellationToken token = default)
+            CancellationToken token = default) where T: new()
         {
             token.ThrowIfCancellationRequested();
 
             try
             {
-                return await Query(() =>
+                return await Query<T>(() =>
                 {
                     var request = Connection(HttpMethod.Post, path, backgroundUserToken);
 
@@ -82,7 +83,7 @@ namespace ImdCloud
         }
 
 
-        private async ValueTask<IDictionary<string, string>> Query(
+        private async ValueTask<U> Query<U>(
                 Func<HttpRequestMessage> requestFactory,
                 CancellationToken token)
         {
@@ -96,7 +97,7 @@ namespace ImdCloud
                     .ConfigureAwait(false))
                 {
                     response.EnsureSuccessStatusCode();
-                    return JsonConvert.DeserializeObject<IDictionary<string, string>>(await response.Content.ReadAsStringAsync());
+                    return JsonConvert.DeserializeObject<U>(await response.Content.ReadAsStringAsync());
                 }
             }
         }
