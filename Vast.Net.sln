@@ -7,7 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImdCloud", "ImdCloud\ImdClo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImdCloud.Test", "ImdCloud.Test\ImdCloud.Test.csproj", "{782156EA-96F1-4D5A-9702-CDD730F20D35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "App\App.csproj", "{C8B41E61-6355-42AE-B153-27113D4375B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "App\App.csproj", "{C8B41E61-6355-42AE-B153-27113D4375B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VASTDemoEvents.Api", "VASTDemoEvents.Api\VASTDemoEvents.Api.csproj", "{C38BD67A-E1FA-4966-AC43-29A6E0E5994A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VASTDemoEvents.Api.Tests", "VASTDemoEvents.Api.Tests\VASTDemoEvents.Api.Tests.csproj", "{0B13EA49-2609-459A-989B-2397EE85DC17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{C8B41E61-6355-42AE-B153-27113D4375B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8B41E61-6355-42AE-B153-27113D4375B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8B41E61-6355-42AE-B153-27113D4375B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C38BD67A-E1FA-4966-AC43-29A6E0E5994A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C38BD67A-E1FA-4966-AC43-29A6E0E5994A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C38BD67A-E1FA-4966-AC43-29A6E0E5994A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C38BD67A-E1FA-4966-AC43-29A6E0E5994A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B13EA49-2609-459A-989B-2397EE85DC17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B13EA49-2609-459A-989B-2397EE85DC17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B13EA49-2609-459A-989B-2397EE85DC17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B13EA49-2609-459A-989B-2397EE85DC17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

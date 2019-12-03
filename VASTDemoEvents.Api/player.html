@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tutle TV</title>
+    <link href="https://unpkg.com/cloudinary-video-player/dist/cld-video-player.min.css" rel="stylesheet">
+</head>
+<body>
+<script src="https://imasdk.googleapis.com/js/sdkloader/ima3.js" type="text/javascript"></script>
+<script src="https://unpkg.com/cloudinary-core/cloudinary-core-shrinkwrap.min.js" type="text/javascript"></script>
+<script src="https://unpkg.com/cloudinary-video-player/dist/cld-video-player.min.js" type="text/javascript"></script>
+<h1>Turtle TV - Tortoise Slow Experiences</h1>
+
+<button id="play-button">Play</button>
+
+<video id="demo-player"
+        width = 800
+        class="cld-video-player">
+</video>
+<script type="text/javascript">
+    // width and hight calculation
+    var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    var button = document.getElementById('play-button');
+    
+    if (isChrome) {
+        button.addEventListener('click', function () {
+            document.getElementById('demo-player_html5_api').play();
+        });
+    } else {
+        button.hidden = true;
+    }
+    
+    var viewportwidth;
+    var viewportheight;
+    if (typeof window.innerWidth != 'undefined')
+    {
+        viewportwidth = window.innerWidth,
+            viewportheight = window.innerHeight
+    }
+    else if (typeof document.documentElement != 'undefined'
+        && typeof document.documentElement.clientWidth !=
+        'undefined' && document.documentElement.clientWidth != 0)
+    {
+        viewportwidth = document.documentElement.clientWidth,
+            viewportheight = document.documentElement.clientHeight
+    }
+    else
+    {
+        viewportwidth = document.getElementsByTagName('body')[0].clientWidth,
+            viewportheight = document.getElementsByTagName('body')[0].clientHeight
+    }
+    // document.write('<p>Your viewport width is '+viewportwidth+'x'+viewportheight+'</p>');
+    var cld = cloudinary.Cloudinary.new({ cloud_name: "groupimd19", secure: true});
+    var adTagUrl = ["https://db-vast-demo.imdcloud.net/tag"];
+    var player = cld.videoPlayer('demo-player', {
+        ads: {
+            adTagUrl: adTagUrl[0]
+        },
+        autoplay: true
+    });
+    player.source('https://res.cloudinary.com/groupimd19/video/upload/v1546513044/samples/sea-turtle.mp4');
+    var adsPlaylistSources = ['https://res.cloudinary.com/groupimd19/video/upload/v1546513044/samples/sea-turtle.mp4'];
+    var adsPlaylistOptions = {
+        autoAdvance: false,
+        repeat: true,
+        presentUpcoming: 1
+    };
+    //  player.playlist(adsPlaylistSources, adsPlaylistOptions);
+    //  player.maximize();
+    //var videoElement = document.getElementById('demo-player');   
+    //videoElement.addEventListener('click', function() {
+    //	videoElement.webkitRequestFullScreen();  
+    //}); 
+</script>
+</body>
+</html>
+
+
+

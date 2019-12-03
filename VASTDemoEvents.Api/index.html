@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>1 Ad at a time Server</title>
+    <script type="text/javascript">
+
+        //let baseUrl = "https://db-vast-demo.imdcloud.net";
+        let baseUrl = "";
+        
+        function add() {
+
+            let text = document.getElementById('text-area-1').value;
+            let name = document.getElementById('txt-name').value;
+
+            let options = {
+                method: 'post',
+                body: JSON.stringify({
+                    Name: name,
+                    Tag: text
+                }),
+                mode: "cors",
+                headers:{
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            http(`${baseUrl}/save`, options)
+                .then(function(response) {
+                    show();
+                });
+        }
+
+        function show() {
+
+            let output = document.getElementById('output');
+            let campaignname = document.getElementById('campaign-name');
+
+            let options = {
+                method: 'get',
+                mode: "cors",
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            http(`${baseUrl}/read`, options)
+                .then(function (res) {
+                    return res.json();
+                })
+                .then(data => {
+                    output.innerText = "";
+                    campaignname.innerText = "";
+                    
+                    if (!data || data.length === 0) {
+                        setTimeout(show, 3000);
+                        return;
+                    }
+
+                    campaignname.innerText = data[0].name;
+                    
+                    for (let i = 0; i < data.length; i++) {
+                        output.innerHTML += "<tr>"
+                        + `   <td>${data[i].logged}</td>`
+                        + `   <td>${data[i].eventName}</td>`
+                        + `   <td>${data[i].referrer}</td>`
+                        + "</tr>";
+                    }
+                    
+                    setTimeout(show, 3000);
+            });
+        }
+
+        function http(url, opt) {
+            return fetch(url, opt);
+        }
+
+        setTimeout(show, 500);
+
+    </script>
+    <style>
+        table {
+            width: 75%;
+        }
+        
+        table, tr, td, th {
+            text-align: left;
+        }
+
+        textarea {
+            width: 70%;
+            height: 200px;
+        }
+
+        #txt-name {
+            width: 30%
+        }
+    </style>
+</head>
+<body>
+
+
+<H1>1 Ad at a time Server</H1>
+<table>
+    <tr>
+        <td></td>
+        <td  style="width:50px;"><label>Name : </label></td>
+        <td><input id="txt-name" type="text" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="3">   <textarea id="text-area-1" rows="2" cols="20"></textarea></td>
+
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="3">    <input id="btn" type="button" value="Add Campaign" onclick="add()" /></td>
+
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="3">
+            <br />
+            <br />
+            <br />
+            Campaign: <span id="campaign-name"></span>
+            <br />
+            <br />
+            <table>
+                <thead>
+                <tr>
+                    <th>Logged</th>
+                    <th>Event Name</th>
+                    <th>Referrer</th>
+                </tr>
+                </thead>
+                <tbody id="output">
+                    
+                </tbody>
+            </table>
+            
+        </td>
+
+    </tr>
+</table>
+
+</body>
+</html>
