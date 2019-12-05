@@ -6,25 +6,35 @@ namespace ImdCloud.Test
     [TestFixture]
     public class OrderCreationTest
     {
-        [Test]
-        public async Task When_valid_returns_orderId()
-        {
-            var orderId = 1;
+        private const string userToken = "user_token";
+        private const int orderId = 1;
 
-            var apiCredentials = new ApiCredentials()
+        private ApiCredentials apiCredentials;
+        private TestHelpers testHelpers;
+        
+        private IOrderCreation target;
+
+        [SetUp]
+        public void SetUp()
+        {
+            apiCredentials = new ApiCredentials()
             {
                 BaseUrl = "http://test.com",
                 Key = "key",
                 Secret = "secret"
             };
-
-            var testHelpers = new TestHelpers(apiCredentials);
+            
+            testHelpers = new TestHelpers(apiCredentials);
 
             var client = new Client(testHelpers.StubOrderCreation(orderId, default).Object, apiCredentials);
 
-            var target = new OrderCreation(client);
+            target = new OrderCreation(client);
+        }
 
-            var actual = await target.Execute(default);
+        [Test]
+        public async Task When_valid_returns_orderId()
+        {
+            var actual = await target.Execute(userToken, default);
 
             Assert.AreEqual(orderId, actual.OrderId);
         }

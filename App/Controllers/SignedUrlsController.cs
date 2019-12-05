@@ -15,9 +15,9 @@ namespace App.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int fileSize, string fileName, CancellationToken token)
+        public async Task<ActionResult> Index(int fileSize, string fileName, string userToken, CancellationToken token)
         {
-            var preSignedUrls = await ingestMedia.GeneratePreSignedURL(fileSize, fileName, token);
+            var preSignedUrls = await ingestMedia.GeneratePreSignedURL(fileSize, fileName, userToken, token);
 
             return Ok(preSignedUrls);
         }

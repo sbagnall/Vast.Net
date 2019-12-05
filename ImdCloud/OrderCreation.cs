@@ -14,7 +14,7 @@ namespace ImdCloud
             this.client = client;
         }
 
-        public async ValueTask<OrderCreationResult> Execute(CancellationToken token)
+        public async ValueTask<OrderCreationResult> Execute(string userToken, CancellationToken token)
         {
             var rand = new Random(10_000);
 
@@ -36,7 +36,7 @@ namespace ImdCloud
         ""id"": ""VAST Demo"",
         ""name"": ""VAST Demo""
     }}
-}}"));
+}}"), userToken, token);
         }
     }
 }

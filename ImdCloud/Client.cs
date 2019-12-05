@@ -24,9 +24,9 @@ namespace ImdCloud
 
         public async ValueTask<T> Get<T>(
             string path, 
-            IDictionary<string, string> @params = default, 
-            string backgroundUserToken = default, 
-            CancellationToken token = default) where T: new()
+            string backgroundUserToken, 
+            CancellationToken token,
+            IDictionary<string, string> @params = default) where T: new()
         {
             token.ThrowIfCancellationRequested();
 
@@ -53,8 +53,8 @@ namespace ImdCloud
         public async ValueTask<T> Post<T>(
             string path, 
             JObject payload, 
-            string backgroundUserToken = default, 
-            CancellationToken token = default) where T: new()
+            string backgroundUserToken, 
+            CancellationToken token) where T: new()
         {
             token.ThrowIfCancellationRequested();
 
@@ -102,7 +102,7 @@ namespace ImdCloud
             }
         }
 
-        private HttpRequestMessage Connection(HttpMethod method, string path, string backgroundUserToken = default)
+        private HttpRequestMessage Connection(HttpMethod method, string path, string backgroundUserToken)
         {
             var message = new HttpRequestMessage(method, new Uri(new Uri(apiCredentials.BaseUrl), path))
             {
@@ -110,14 +110,10 @@ namespace ImdCloud
                     { HttpRequestHeader.ContentType.ToString(), "application/json" },
                     { HttpRequestHeader.Accept.ToString(), "application/json" },
                     { "X-Api-Key", apiCredentials.Key },
-                    { "X-Api-Secret", apiCredentials.Secret }
+                    { "X-Api-Secret", apiCredentials.Secret },
+                    {  "X-Api-Token", backgroundUserToken }
                 }
             };
-
-            if (backgroundUserToken != default)
-            {
-                message.Headers.Add("X-Api-Token", backgroundUserToken);
-            }
 
             return message;
         }

@@ -5,7 +5,7 @@ namespace ImdCloud
 {
     public interface IOrderCreation
     {
-        ValueTask<OrderCreationResult> Execute(CancellationToken token);
+        ValueTask<OrderCreationResult> Execute(string userToken, CancellationToken token);
     }
 
     public class OrderCreationResult

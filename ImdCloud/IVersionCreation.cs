@@ -5,7 +5,7 @@ namespace ImdCloud
 {
     public interface IVersionCreation
     {
-        ValueTask<VersionCreationResult> Execute(int orderId, CancellationToken token);
+        ValueTask<VersionCreationResult> Execute(int orderId, string userToken, CancellationToken token);
     }
 
     public class VersionCreationResult

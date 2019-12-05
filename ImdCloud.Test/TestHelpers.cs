@@ -119,20 +119,23 @@ namespace ImdCloud.Test
             return clientFactory;
         }
 
-        public void StubVersionFileCreation(int versionId, int fileId, string token)
+        public Mock<IHttpClientFactory> StubVersionFileCreation(int versionId, int fileId, string token)
         {
             var response = $@"{{
     ""fileId"": { fileId } 
 }}";
 
+            var clientFactory = new Mock<IHttpClientFactory>();
             var messageHandler = new Mock<HttpMessageHandler>();
+
+            clientFactory.Setup(x => x.CreateClient(It.IsAny<string>())).Returns(new HttpClient(messageHandler.Object));
 
             messageHandler.Protected().Setup<Task<HttpResponseMessage>>(
                     "SendAsync",
                     ItExpr.Is<HttpRequestMessage>(r => CheckRequest<object>(
                         r,
                         HttpMethod.Post,
-                        $"{apiCredentials.BaseUrl}/versions/#{versionId}/files",
+                        $"{apiCredentials.BaseUrl}/versions/{versionId}/files",
                         (content) => true,
                         token).GetAwaiter().GetResult()),
                     ItExpr.IsAny<CancellationToken>())
@@ -141,6 +144,8 @@ namespace ImdCloud.Test
                         StatusCode = System.Net.HttpStatusCode.OK,
                         Content = new StringContent(response),
                     });
+
+            return clientFactory;
         }
 
         public void StubGetUploadCredentials(int versionId, int fileId, string token)

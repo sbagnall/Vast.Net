@@ -9,14 +9,14 @@ namespace ImdCloud
     {
         ValueTask<T> Get<T>(
             string path, 
-            IDictionary<string, string> @params = default, 
-            string backgroundUserToken = default, 
-            CancellationToken token = default) where T: new();
+            string backgroundUserToken, 
+            CancellationToken token,
+            IDictionary<string, string> @params = default) where T: new();
 
         ValueTask<T> Post<T>(
             string path,
             JObject payload,
-            string backgroundUserToken = default,
-            CancellationToken token = default) where T: new();
+            string backgroundUserToken,
+            CancellationToken token) where T: new();
     }
 }

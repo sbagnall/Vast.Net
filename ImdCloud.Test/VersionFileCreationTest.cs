@@ -4,17 +4,19 @@ using System.Threading.Tasks;
 namespace ImdCloud.Test
 {
     [TestFixture]
-    public class VersionCreationTest
+    public class VersionFileCreationTest
     {
         private const string userToken = "user_token";
 
-        private const int orderId = 1;
         private const int versionId = 1;
+        private const int fileSize = 1000;
+        private const string fileName = "fle_name";
+        private const int fileId = 1;
 
         private ApiCredentials apiCredentials;
         private TestHelpers testHelpers;
-        
-        private IVersionCreation target;
+
+        private IVersionFileCreation target;
 
         [SetUp]
         public void SetUp()
@@ -28,17 +30,17 @@ namespace ImdCloud.Test
 
             testHelpers = new TestHelpers(apiCredentials);
 
-            var client = new Client(testHelpers.StubVersionCreation(orderId, versionId, default).Object, apiCredentials);
+            var client = new Client(testHelpers.StubVersionFileCreation(versionId, fileId, default).Object, apiCredentials);
 
-            target = new VersionCreation(client);
+            target = new VersionFileCreation(client);
         }
 
         [Test]
-        public async Task When_valid_returns_versionId()
+        public async Task When_()
         {
-            var actual = await target.Execute(orderId, userToken, default);
+            var actual = await target.Execute(versionId, fileSize, fileName, userToken, default);
 
-            Assert.AreEqual(versionId, actual.Id);
+            Assert.AreEqual(fileId, actual);
         }
     }
 }

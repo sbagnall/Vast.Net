@@ -37,7 +37,10 @@ namespace ImdCloud
 }}";
             }
 
-            return await client.Post<Dictionary<string, string>>("login", JObject.Parse(request));
+            // TODO: see what happens here (i'm guessing we have no token before we login):-
+            string userToken = string.Empty;
+
+            return await client.Post<Dictionary<string, string>>("login", JObject.Parse(request), userToken, token);
         }
 
         public async ValueTask<IDictionary<string, string>> Login(UserCredentials userCredentials, CancellationToken token)

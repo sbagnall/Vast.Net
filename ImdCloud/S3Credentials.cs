@@ -13,9 +13,10 @@ namespace ImdCloud
             this.client = client;
         }
 
-        public async ValueTask<S3CredentialsResult> Execute(int versionId, int fileId, CancellationToken token)
+        public async ValueTask<S3CredentialsResult> Execute(int versionId, int fileId, string userToken, CancellationToken token)
         {
-            var result = await client.Get<Dictionary<string, string>>($"versions/{versionId}/files/{fileId}/uploadcredentials", token: token);
+            var result = await client.Get<Dictionary<string, string>>(
+                $"versions/{versionId}/files/{fileId}/uploadcredentials", userToken, token);
 
             return Map(result);
         }
@@ -32,7 +33,7 @@ namespace ImdCloud
         public class S3CredentialsResult
         {
             public string BucketName { get; set; }
-            public string ObjectKey { get; internal set; }
+            public string ObjectKey { get; set; }
         }
     }
 }

@@ -6,6 +6,6 @@ namespace ImdCloud
 {
     public interface IS3Credentials
     {
-        ValueTask<S3CredentialsResult> Execute(int versionId, int fileId, CancellationToken token);
+        ValueTask<S3CredentialsResult> Execute(int versionId, int fileId, string userToken, CancellationToken token);
     }
 }

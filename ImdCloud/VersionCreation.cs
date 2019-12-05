@@ -20,7 +20,7 @@ namespace ImdCloud
             this.client = client;
         }
 
-        public async ValueTask<VersionCreationResult> Execute(int orderId, CancellationToken token)
+        public async ValueTask<VersionCreationResult> Execute(int orderId, string userToken, CancellationToken token)
         {
             var rand = new Random(10_000);
             var randomElement = $"{DateTime.Now.Ticks}-{rand.Next()}";
@@ -52,7 +52,7 @@ namespace ImdCloud
             }}
         }}
     ]
-}}"));
+}}"), userToken, token);
 
             //# {
             //#   "versions": [
